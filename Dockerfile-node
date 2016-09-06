@@ -1,0 +1,10 @@
+FROM node:6.5.0-wheezy
+
+MAINTAINER Doron Segal <doron2402@gmail.com>
+
+ADD . /var/www
+WORKDIR /var/www
+
+RUN npm install
+
+CMD ["npm", "start"]

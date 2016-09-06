@@ -1,33 +1,7 @@
 ## Data
-```javascript
-[ {
-  "address" : "Intersection of 26TH ST and TENNESSEE ST",
-  "opened" : "2016-09-04T00:38:27",
-  "source" : "Open311",
-  "status_notes" : "Open",
-  "media_url" : {
-    "url" : "http://mobile311.sfgov.org/media/san_francisco/report/photos/57cbcf57df8605cb94d8bfa8/report.jpg"
-  },
-  "supervisor_district" : "10",
-  "point" : {
-    "latitude" : "37.7515022676729",
-    "human_address" : "{\"address\":\"\",\"city\":\"\",\"state\":\"\",\"zip\":\"\"}",
-    "needs_recoding" : false,
-    "longitude" : "-122.38862909151"
-  },
-  "case_id" : "6273247",
-  "responsible_agency" : "DPT Abandoned Vehicles Work Queue",
-  "neighborhood" : "Central Waterfront",
-  "category" : "Abandoned Vehicle",
-  "updated" : "2016-09-04T00:38:27",
-  "status" : "Open"
-},
-...
-]
 
-```
 
-## Database
+### Database
 
 ```sql
 
@@ -35,20 +9,21 @@ DROP TABLE IF EXISTS `cases`;
 
 CREATE TABLE `cases` (
   `case_id` int(11) unsigned NOT NULL,
-  `address` varchar(256) DEFAULT NULL,
+  `address` text,
   `opened` timestamp NULL DEFAULT NULL,
   `location` geometry NOT NULL,
-  `source` varchar(32) DEFAULT '',
-  `status_notes` varchar(32) DEFAULT NULL,
-  `supervisor_district` int(11) DEFAULT NULL,
+  `source` varchar(64) DEFAULT '',
+  `status_notes` text,
+  `supervisor_district` int(32) DEFAULT NULL,
   `human_address` json DEFAULT NULL,
   `needs_recoding` tinyint(1) DEFAULT NULL,
-  `responsible_agency` varchar(128) DEFAULT NULL,
-  `neighborhood` varchar(128) DEFAULT NULL,
-  `category` varchar(64) DEFAULT NULL,
+  `responsible_agency` varchar(256) DEFAULT NULL,
+  `neighborhood` varchar(256) DEFAULT NULL,
+  `category` varchar(128) DEFAULT NULL,
   `updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `status` varchar(16) NOT NULL DEFAULT '',
+  `status` varchar(128) NOT NULL DEFAULT '',
   `status_code` tinyint(1) NOT NULL COMMENT 'open=1, closed=0',
+  `url` text,
   PRIMARY KEY (`case_id`),
   KEY `since` (`opened`),
   KEY `status` (`status_code`),
@@ -58,5 +33,17 @@ CREATE TABLE `cases` (
 
 
 
+```
+
+### Creating Distance Calculation Functions
+  Next we can create a new function to calculate the geographical
+  distance between two points (“longitude,latitude” coordinate pairs, or nodes)
+  using the spherical law of cosines (SLC) formula for determining the
+  “Great-circle distance”:
+
+```sql
+
+
 
 ```
+
