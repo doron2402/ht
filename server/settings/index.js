@@ -12,5 +12,7 @@ module.exports = {
     },
     casesTable: 'cases'
   },
-  url: 'http://data.sfgov.org/resource/vw6y-z8j6.json' // url to fetch data from
+  url: 'http://data.sfgov.org/resource/vw6y-z8j6.json', // url to fetch data from
+  cronPattern: '00 00 * * *', // everyday at midnight
+  localTime: 'America/Los_Angeles'
 };
