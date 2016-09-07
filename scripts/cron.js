@@ -8,24 +8,21 @@ const db = knex({
   client: 'mysql',
   connection: config.mysql.connection
 });
-
 const url = config.url;
-const LOCAL_TIME = 'America/Los_Angeles';
+const LOCAL_TIME = config.localTime;
 const TABLE_NAME = config.mysql.casesTable;
-const cronPattern = '00 00 * * *'; // everyday at midnight
+const cronPattern = config.cronPattern;
+const internal = {
+  counter: 0
+};
 
-const parseLocation = (point) => {
+internal.parseLocation = (point) => {
   if (point && point.longitude && point.latitude) {
     const mysqlPoint = `'POINT(${parseFloat(point.longitude)} ${parseFloat(point.latitude)})'`;
     return `ST_GeomFromText('${mysqlPoint}')END_ST_GeomFromText`;
   }
   // Default location is BORA BORA!!
   return "ST_GeomFromText(''POINT(-151.7414904 -16.5004)'')END_ST_GeomFromText";
-};
-
-
-const internal = {
-  counter: 0
 };
 
 internal.insertData = (data) => {
@@ -66,7 +63,7 @@ internal.parseData = (obj) => {
     case_id: parseInt(obj.case_id, 10), // int
     address: obj.address || null, // string
     opened: obj.opened || moment().format('YYYY-MM-DD"T"HH:mm:dd'), // timestamp
-    location: parseLocation(obj.point), // lat/lng
+    location: internal.parseLocation(obj.point), // lat/lng
     source: obj.source || null, // string
     status_notes: obj.status_notes || null, // string
     supervisor_district: obj.supervisor_district || null, // string
