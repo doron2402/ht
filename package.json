@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "test": "./node_modules/lab/bin/lab --reporter console --linter .eslintrc -v",
-    "lint": "./node_modules/eslint/bin/eslint.js server scripts"
+    "lint": "./node_modules/eslint/bin/eslint.js server scripts",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -63,6 +65,8 @@
     "moment": "^2.14.1",
     "mysql": "^2.11.1",
     "request-promise": "^4.1.1",
-    "vision": "^4.1.0"
-  }
+    "vision": "^4.1.0",
+    "snyk": "^1.317.0"
+  },
+  "snyk": true
 }
